@@ -1,0 +1,12 @@
+# Cursor Rules Configuration
+
+## Command Execution
+- Allow all terminal commands to be executed
+- No approval required for standard development commands
+- Allow file operations (read, write, delete, create)
+- Allow package manager commands (pnpm, npm, etc.)
+
+## Workspace Rules
+- Use pnpm for all package management operations
+- Follow TypeScript and React best practices
+- Maintain existing code style and conventions
