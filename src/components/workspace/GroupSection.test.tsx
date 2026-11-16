@@ -1,9 +1,10 @@
+import { create } from '@bufbuild/protobuf';
+import { TabSchema, GroupSchema } from '@/generated/workspace_pb';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GroupSection } from './GroupSection';
-import { TabRow } from './TabRow';
 import type { Group } from '@/utils/group';
 import type { Tab } from '@/utils/tab';
 import { Group_GroupColor } from '@/utils/group';
@@ -34,7 +35,7 @@ vi.mock('@/hooks/useWindowActions', () => ({
   }),
 }));
 
-const createMockGroup = (overrides: Partial<Group> = {}): Group => ({
+const createMockGroup = (overrides: Partial<Omit<Group, '$typeName'>> = {}): Group => create(GroupSchema, {
   id: 1,
   windowId: 100,
   title: 'Test Group',
@@ -43,7 +44,7 @@ const createMockGroup = (overrides: Partial<Group> = {}): Group => ({
   ...overrides,
 });
 
-const createMockTab = (overrides: Partial<Tab> = {}): Tab => ({
+const createMockTab = (overrides: Partial<Omit<Tab, '$typeName'>> = {}): Tab => create(TabSchema, {
   id: 1,
   windowId: 100,
   groupId: 1,
@@ -54,7 +55,7 @@ const createMockTab = (overrides: Partial<Tab> = {}): Tab => ({
   pinned: false,
   highlighted: false,
   incognito: false,
-  selected: false,
+
   autoDiscardable: true,
   ...overrides,
 });
@@ -128,7 +129,7 @@ describe('GroupSection', () => {
     it('updates local state immediately for optimistic UI feedback', async () => {
       const user = userEvent.setup();
       let resolveToggle: () => void;
-      mockToggleGroupCollapse.mockImplementation(() => new Promise(resolve => {
+      mockToggleGroupCollapse.mockImplementation(() => new Promise<void>(resolve => {
         resolveToggle = resolve;
       }));
       

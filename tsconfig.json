@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+    "types": ["chrome", "node", "vite/client", "vitest/globals"],
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
@@ -23,10 +24,9 @@
     "forceConsistentCasingInFileNames": true,
 
     /* Path mapping */
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "typeutils/*": ["src/typeutils/*"]
+      "@/*": ["./src/*"],
+      "typeutils/*": ["./src/typeutils/*"]
     }
   },
   "include": ["src"],

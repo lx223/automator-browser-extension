@@ -5,14 +5,17 @@
   "type": "module",
   "packageManager": "pnpm@10.17.1",
   "scripts": {
-    "dev": "NODE_ENV=development vite build --watch --mode development",
-    "build": "vite build",
-    "test": "vitest run",
+    "dev": "pnpm codegen && NODE_ENV=development vite build --watch --mode development",
+    "build": "pnpm codegen && vite build",
+    "test": "pnpm codegen && vitest run",
     "test:watch": "vitest",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "type-check": "tsc --noEmit",
+    "lint": "pnpm proto:lint && pnpm type-check",
+    "type-check": "pnpm codegen && tsc --noEmit",
     "generate-icons": "tsx scripts/generate-icons.ts",
-    "codegen": "tsx scripts/codegen.ts"
+    "codegen": "node scripts/codegen.mjs",
+    "proto:generate": "pnpm codegen",
+    "proto:lint": "buf lint --config '{\"version\":\"v2\",\"modules\":[{\"path\":\"proto\"}],\"lint\":{\"use\":[\"MINIMAL\"],\"except\":[\"PACKAGE_DIRECTORY_MATCH\"]}}' && buf format proto --diff --exit-code",
+    "proto:check": "pnpm proto:lint && buf build proto -o /dev/null"
   },
   "keywords": [
     "chrome-extension",
@@ -22,7 +25,7 @@
   "author": "lx223",
   "license": "CC-BY-NC-4.0",
   "dependencies": {
-    "@bufbuild/protobuf": "^2.1.0",
+    "@bufbuild/protobuf": "2.17.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.5",
@@ -31,9 +34,8 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@bufbuild/buf": "^1.36.0",
-    "@bufbuild/protoc-gen-es": "^2.1.0",
-    "@eslint/js": "^9.39.2",
+    "@bufbuild/buf": "1.75.0",
+    "@bufbuild/protoc-gen-es": "2.17.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
@@ -41,19 +43,13 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.15.0",
-    "@typescript-eslint/parser": "^8.15.0",
-    "@vitejs/plugin-react": "^5.1.1",
-    "eslint": "^9.15.0",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.11",
+    "@vitejs/plugin-react": "^6.3.0",
     "hot-reload-extension-vite": "^1.1.0",
     "jsdom": "^26.0.0",
     "sharp": "^0.34.5",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.51.0",
-    "vite": "^7.2.2",
-    "vitest": "^3.2.3"
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
   }
 }

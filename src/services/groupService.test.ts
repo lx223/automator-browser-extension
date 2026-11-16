@@ -10,8 +10,8 @@ describe('GroupService', () => {
   describe('getAllGroups', () => {
     it('returns all groups with tab IDs', async () => {
       const mockGroups: chrome.tabGroups.TabGroup[] = [
-        { id: 1, windowId: 100, title: 'Work', color: 'blue', collapsed: false },
-        { id: 2, windowId: 100, title: 'Personal', color: 'green', collapsed: true },
+        { id: 1, windowId: 100, title: 'Work', color: 'blue' as chrome.tabGroups.Color, shared: false, collapsed: false },
+        { id: 2, windowId: 100, title: 'Personal', color: 'green' as chrome.tabGroups.Color, shared: false, collapsed: true },
       ];
 
       vi.mocked(chrome.tabGroups.query).mockImplementation((_query, callback) => {
@@ -101,13 +101,13 @@ describe('GroupService', () => {
 
       await groupService.updateGroup(1, {
         title: 'New Title',
-        color: 'red',
+        color: 'red' as chrome.tabGroups.Color,
         collapsed: true,
       });
 
       expect(chrome.tabGroups.update).toHaveBeenCalledWith(
         1,
-        { title: 'New Title', color: 'red', collapsed: true },
+        { title: 'New Title', color: 'red' as chrome.tabGroups.Color, collapsed: true },
         expect.any(Function)
       );
     });
