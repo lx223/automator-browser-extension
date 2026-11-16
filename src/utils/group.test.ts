@@ -7,8 +7,8 @@ describe('createGroupFromChrome', () => {
       id: 1,
       windowId: 100,
       title: 'Work',
-      color: 'blue',
-      collapsed: false,
+      color: 'blue' as chrome.tabGroups.Color,
+      shared: false, collapsed: false,
     };
 
     const group = createGroupFromChrome(chromeGroup);
@@ -25,8 +25,8 @@ describe('createGroupFromChrome', () => {
       id: 2,
       windowId: 100,
       title: 'Personal',
-      color: 'green',
-      collapsed: true,
+      color: 'green' as chrome.tabGroups.Color,
+      shared: false, collapsed: true,
     };
 
     const group = createGroupFromChrome(chromeGroup);
@@ -37,15 +37,15 @@ describe('createGroupFromChrome', () => {
 
   it('maps all Chrome colors correctly', () => {
     const colorMappings: Array<{ chrome: chrome.tabGroups.Color; proto: Group_GroupColor }> = [
-      { chrome: 'grey', proto: Group_GroupColor.GREY },
-      { chrome: 'blue', proto: Group_GroupColor.BLUE },
-      { chrome: 'red', proto: Group_GroupColor.RED },
-      { chrome: 'yellow', proto: Group_GroupColor.YELLOW },
-      { chrome: 'green', proto: Group_GroupColor.GREEN },
-      { chrome: 'pink', proto: Group_GroupColor.PINK },
-      { chrome: 'purple', proto: Group_GroupColor.PURPLE },
-      { chrome: 'cyan', proto: Group_GroupColor.CYAN },
-      { chrome: 'orange', proto: Group_GroupColor.ORANGE },
+      { chrome: 'grey' as chrome.tabGroups.Color, proto: Group_GroupColor.GREY },
+      { chrome: 'blue' as chrome.tabGroups.Color, proto: Group_GroupColor.BLUE },
+      { chrome: 'red' as chrome.tabGroups.Color, proto: Group_GroupColor.RED },
+      { chrome: 'yellow' as chrome.tabGroups.Color, proto: Group_GroupColor.YELLOW },
+      { chrome: 'green' as chrome.tabGroups.Color, proto: Group_GroupColor.GREEN },
+      { chrome: 'pink' as chrome.tabGroups.Color, proto: Group_GroupColor.PINK },
+      { chrome: 'purple' as chrome.tabGroups.Color, proto: Group_GroupColor.PURPLE },
+      { chrome: 'cyan' as chrome.tabGroups.Color, proto: Group_GroupColor.CYAN },
+      { chrome: 'orange' as chrome.tabGroups.Color, proto: Group_GroupColor.ORANGE },
     ];
 
     colorMappings.forEach(({ chrome: chromeColor, proto: protoColor }) => {
@@ -53,7 +53,7 @@ describe('createGroupFromChrome', () => {
         id: 1,
         windowId: 100,
         color: chromeColor,
-        collapsed: false,
+        shared: false, collapsed: false,
       };
 
       const group = createGroupFromChrome(chromeGroup);
@@ -66,8 +66,8 @@ describe('createGroupFromChrome', () => {
       id: 3,
       windowId: 100,
       title: '',
-      color: 'grey',
-      collapsed: false,
+      color: 'grey' as chrome.tabGroups.Color,
+      shared: false, collapsed: false,
     };
 
     const group = createGroupFromChrome(chromeGroup);
@@ -78,8 +78,8 @@ describe('createGroupFromChrome', () => {
     const chromeGroup: chrome.tabGroups.TabGroup = {
       id: 4,
       windowId: 100,
-      color: 'grey',
-      collapsed: false,
+      color: 'grey' as chrome.tabGroups.Color,
+      shared: false, collapsed: false,
     };
 
     const group = createGroupFromChrome(chromeGroup);

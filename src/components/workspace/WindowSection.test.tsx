@@ -1,10 +1,10 @@
+import { create } from '@bufbuild/protobuf';
+import { TabSchema, GroupSchema, WindowSchema } from '@/generated/workspace_pb';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { WindowSection } from './WindowSection';
-import { TabRow } from './TabRow';
-import { GroupSection } from './GroupSection';
 import type { Window } from '@/utils/window';
 import type { Tab } from '@/utils/tab';
 import type { Group } from '@/utils/group';
@@ -36,14 +36,14 @@ vi.mock('@/hooks/useWindowActions', () => ({
     }),
 }));
 
-const createMockWindow = (overrides: Partial<Window> = {}): Window => ({
+const createMockWindow = (overrides: Partial<Omit<Window, '$typeName'>> = {}): Window => create(WindowSchema, {
     id: 100,
     focused: true,
     incognito: false,
     ...overrides,
 });
 
-const createMockTab = (overrides: Partial<Tab> = {}): Tab => ({
+const createMockTab = (overrides: Partial<Omit<Tab, '$typeName'>> = {}): Tab => create(TabSchema, {
     id: 1,
     windowId: 100,
     groupId: -1,
@@ -54,12 +54,12 @@ const createMockTab = (overrides: Partial<Tab> = {}): Tab => ({
     pinned: false,
     highlighted: false,
     incognito: false,
-    selected: false,
+
     autoDiscardable: true,
     ...overrides,
 });
 
-const createMockGroup = (overrides: Partial<Group> = {}): Group => ({
+const createMockGroup = (overrides: Partial<Omit<Group, '$typeName'>> = {}): Group => create(GroupSchema, {
     id: 1,
     windowId: 100,
     title: 'Test Group',

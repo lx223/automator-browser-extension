@@ -6,6 +6,7 @@ import { TabSchema } from '@/generated/workspace_pb';
 
 export function createTabFromChrome(chromeTab: chrome.tabs.Tab): Tab {
   return create(TabSchema, {
+    ...chromeTab,
     id: chromeTab.id!,
     windowId: chromeTab.windowId!,
     groupId: chromeTab.groupId,

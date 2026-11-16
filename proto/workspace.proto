@@ -13,6 +13,24 @@ message Tab {
   bool pinned = 8;
   bool active = 9;
   bool muted = 10;
+  optional string pending_url = 11;
+  bool highlighted = 12;
+  bool incognito = 13;
+  optional bool audible = 14;
+  optional bool discarded = 15;
+  optional bool auto_discardable = 16;
+  optional string status = 17;
+  optional int32 opener_tab_id = 18;
+  optional int32 width = 19;
+  optional int32 height = 20;
+  MutedInfo muted_info = 21;
+  optional string session_id = 22;
+}
+
+message MutedInfo {
+  bool muted = 1;
+  optional string reason = 2;
+  optional string extension_id = 3;
 }
 
 message Group {
@@ -40,6 +58,15 @@ message Window {
   int32 id = 1;
   bool focused = 2;
   bool incognito = 3;
+  bool always_on_top = 4;
+  optional int32 top = 5;
+  optional int32 left = 6;
+  optional int32 width = 7;
+  optional int32 height = 8;
+  optional string type = 9;
+  optional string state = 10;
+  repeated Tab tabs = 11;
+  optional string session_id = 12;
 }
 
 message Workspace {

@@ -112,8 +112,8 @@ describe('TabService', () => {
   describe('moveTab', () => {
     it('moves tab to new index', async () => {
       vi.mocked(chrome.tabs.move).mockImplementation((_tabId, _moveProps, callback) => {
-        callback?.({} as chrome.tabs.Tab);
-        return Promise.resolve({} as chrome.tabs.Tab);
+        callback?.([]);
+        return Promise.resolve([]);
       });
 
       await tabService.moveTab(1, 5);
@@ -123,8 +123,8 @@ describe('TabService', () => {
 
     it('moves tab to specific window', async () => {
       vi.mocked(chrome.tabs.move).mockImplementation((_tabId, _moveProps, callback) => {
-        callback?.({} as chrome.tabs.Tab);
-        return Promise.resolve({} as chrome.tabs.Tab);
+        callback?.([]);
+        return Promise.resolve([]);
       });
 
       await tabService.moveTab(1, 0, 200);

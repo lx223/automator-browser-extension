@@ -17,6 +17,7 @@ describe('useGroups', () => {
     vi.clearAllMocks();
     vi.mocked(groupService.getAllGroups).mockResolvedValue([
       {
+        $typeName: 'proto.Group',
         id: 1,
         windowId: 100,
         title: 'Test Group',
@@ -76,12 +77,12 @@ describe('useGroups', () => {
       });
 
       vi.mocked(groupService.getAllGroups).mockResolvedValue([
-        { id: 1, windowId: 100, title: 'Test Group', color: 0, collapsed: false },
-        { id: 2, windowId: 100, title: 'New Group', color: 1, collapsed: false },
+        { $typeName: 'proto.Group', id: 1, windowId: 100, title: 'Test Group', color: 0, collapsed: false },
+        { $typeName: 'proto.Group', id: 2, windowId: 100, title: 'New Group', color: 1, collapsed: false },
       ]);
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_GROUP_CREATED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_GROUP_CREATED });
       });
 
       await waitFor(() => {
@@ -97,7 +98,7 @@ describe('useGroups', () => {
       });
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_GROUP_UPDATED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_GROUP_UPDATED });
       });
 
       await waitFor(() => {
@@ -113,7 +114,7 @@ describe('useGroups', () => {
       });
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_GROUP_REMOVED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_GROUP_REMOVED });
       });
 
       await waitFor(() => {
@@ -129,7 +130,7 @@ describe('useGroups', () => {
       });
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_GROUP_MOVED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_GROUP_MOVED });
       });
 
       await waitFor(() => {
@@ -147,11 +148,11 @@ describe('useGroups', () => {
       });
 
       vi.mocked(groupService.getAllGroups).mockResolvedValue([
-        { id: 1, windowId: 100, title: 'Test Group', color: 0, collapsed: false },
+        { $typeName: 'proto.Group', id: 1, windowId: 100, title: 'Test Group', color: 0, collapsed: false },
       ]);
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_GROUP_CHANGED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_GROUP_CHANGED });
       });
 
       await waitFor(() => {
@@ -167,7 +168,7 @@ describe('useGroups', () => {
       });
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_MOVED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_MOVED });
       });
 
       await waitFor(() => {
@@ -185,7 +186,7 @@ describe('useGroups', () => {
       const initialCallCount = vi.mocked(groupService.getAllGroups).mock.calls.length;
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_UPDATED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_UPDATED });
       });
 
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -225,7 +226,7 @@ describe('useGroups', () => {
       unmount();
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_GROUP_CREATED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_GROUP_CREATED });
       });
 
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -238,19 +239,19 @@ describe('useGroups', () => {
     it('prevents concurrent loads', async () => {
       let resolveFirst: () => void;
       const firstPromise = new Promise<any[]>((resolve) => {
-        resolveFirst = () => resolve([{ id: 1, windowId: 100, title: 'Group 1', color: 0, collapsed: false }]);
+        resolveFirst = () => resolve([{ $typeName: 'proto.Group', id: 1, windowId: 100, title: 'Group 1', color: 0, collapsed: false }]);
       });
 
       vi.mocked(groupService.getAllGroups)
         .mockReturnValueOnce(firstPromise)
-        .mockResolvedValue([{ id: 2, windowId: 100, title: 'Group 2', color: 0, collapsed: false }]);
+        .mockResolvedValue([{ $typeName: 'proto.Group', id: 2, windowId: 100, title: 'Group 2', color: 0, collapsed: false }]);
 
       const { result } = renderHook(() => useGroups());
 
       expect(result.current.loading).toBe(true);
 
       act(() => {
-        eventBus.emit({ type: Event.EVENT_TAB_GROUP_CREATED });
+        eventBus.emit({ $typeName: 'proto.BrowserEventMessage', type: Event.EVENT_TAB_GROUP_CREATED });
       });
 
       resolveFirst!();

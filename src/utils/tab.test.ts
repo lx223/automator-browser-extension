@@ -4,6 +4,8 @@ import { createTabFromChrome } from './tab';
 describe('createTabFromChrome', () => {
   it('creates a Tab from Chrome tab with all properties', () => {
     const chromeTab: chrome.tabs.Tab = {
+      frozen: false,
+      discarded: false,
       id: 1,
       windowId: 100,
       groupId: 5,
@@ -14,7 +16,6 @@ describe('createTabFromChrome', () => {
       pinned: true,
       active: true,
       highlighted: true,
-      discarded: false,
       audible: true,
       status: 'complete',
       mutedInfo: {
@@ -42,6 +43,9 @@ describe('createTabFromChrome', () => {
 
   it('handles tab with minimal properties', () => {
     const chromeTab: chrome.tabs.Tab = {
+      frozen: false,
+      discarded: false,
+      groupId: -1,
       id: 2,
       windowId: 100,
       index: 1,
@@ -67,6 +71,9 @@ describe('createTabFromChrome', () => {
 
   it('handles muted tab', () => {
     const chromeTab: chrome.tabs.Tab = {
+      frozen: false,
+      discarded: false,
+      groupId: -1,
       id: 3,
       windowId: 100,
       index: 0,
@@ -89,6 +96,9 @@ describe('createTabFromChrome', () => {
 
   it('handles unmuted tab', () => {
     const chromeTab: chrome.tabs.Tab = {
+      frozen: false,
+      discarded: false,
+      groupId: -1,
       id: 4,
       windowId: 100,
       index: 0,
