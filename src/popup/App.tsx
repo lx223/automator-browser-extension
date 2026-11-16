@@ -1,3 +1,4 @@
+import type { Tab } from '../types/browser';
 import React, { useEffect } from 'react'
 import TabTile from '../components/TabTile'
 import { useTabs } from '../hooks/useTabs'
@@ -14,7 +15,7 @@ const App: React.FC = () => {
     loadAllTabs()
   }, [])
 
-  const handleTabClick = (tab: chrome.tabs.Tab) => {
+  const handleTabClick = (tab: Tab) => {
     if (tab.id) {
       chrome.tabs.update(tab.id, { active: true })
       chrome.windows.update(tab.windowId!, { focused: true })
@@ -38,7 +39,7 @@ const App: React.FC = () => {
     })
     
     if (targetTab) {
-      const currentPinned = (targetTab as chrome.tabs.Tab).pinned || false
+      const currentPinned = (targetTab as Tab).pinned || false
       const newPinnedState = !currentPinned
       chrome.runtime.sendMessage({ 
         type: MESSAGE_TYPES.PIN_TAB, 

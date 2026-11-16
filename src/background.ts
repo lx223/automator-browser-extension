@@ -1,6 +1,7 @@
 // Background script for the browser extension
 console.log('Background script loaded');
 
+import { tabFromChrome, groupFromChrome } from './utils/browserModels';
 import { MessageService } from './services/messageService';
 import { MESSAGE_TYPES } from './constants/messages';
 
@@ -50,7 +51,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Tab event listeners for real-time updates
 chrome.tabs.onCreated.addListener((tab) => {
   console.log('Tab created:', tab.id);
-  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_CREATED', data: { tab } });
+  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_CREATED', data: { tab: tabFromChrome(tab) } });
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {
@@ -61,7 +62,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url) {
     console.log('Tab updated:', tab.url);
-    notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_UPDATED', data: { tabId, changeInfo, tab } });
+    notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_UPDATED', data: { tabId, changeInfo, tab: tabFromChrome(tab) } });
   }
   
   // Check for group membership changes
@@ -73,7 +74,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       tabId, 
       oldGroupId: changeInfo.groupId === chrome.tabGroups.TAB_GROUP_ID_NONE ? null : changeInfo.groupId,
       newGroupId: tab.groupId || null,
-      tab 
+      tab: tabFromChrome(tab)
       } 
     });
   }
@@ -102,22 +103,22 @@ chrome.tabs.onDetached.addListener((tabId, detachInfo) => {
 // Tab Group Event Listeners
 chrome.tabGroups.onCreated.addListener((group) => {
   console.log('Tab group created:', group);
-  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_CREATED', data: { group } });
+  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_CREATED', data: { group: groupFromChrome(group) } });
 });
 
 chrome.tabGroups.onUpdated.addListener((group) => {
   console.log('Tab group updated:', group);
-  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_UPDATED', data: { group } });
+  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_UPDATED', data: { group: groupFromChrome(group) } });
 });
 
 chrome.tabGroups.onMoved.addListener((group) => {
   console.log('Tab group moved:', group);
-  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_MOVED', data: { group } });
+  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_MOVED', data: { group: groupFromChrome(group) } });
 });
 
 chrome.tabGroups.onRemoved.addListener((group) => {
   console.log('Tab group removed:', group);
-  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_REMOVED', data: { group } });
+  notifyTabsPage(MESSAGE_TYPES.TAB_EVENT, { eventType: 'TAB_GROUP_REMOVED', data: { group: groupFromChrome(group) } });
 });
 
 // Notify extension tabs page of changes

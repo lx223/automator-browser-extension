@@ -1,10 +1,11 @@
+import type { Tab } from '../types/browser';
 import React from 'react';
 import { TabWithScreenshot } from '../types/tab';
 
 interface TabTileProps {
   tab: TabWithScreenshot;
   screenshotsLoading: Set<number>;
-  onTabClick: (tab: chrome.tabs.Tab) => void;
+  onTabClick: (tab: Tab) => void;
   onCloseTab: (tabId: number, event: React.MouseEvent) => void;
   onPinTab: (tabId: number, event: React.MouseEvent) => void;
   getFaviconUrl: (url: string) => string;

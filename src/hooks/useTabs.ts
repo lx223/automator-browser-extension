@@ -1,3 +1,4 @@
+import type { Tab, Group } from '../types/browser';
 import { useState } from 'react';
 import { TabsByWindow, TabWithScreenshot } from '../types/tab';
 
@@ -37,7 +38,7 @@ export function useTabs() {
     }
   };
 
-  const updateTabInState = (updatedTab: chrome.tabs.Tab) => {
+  const updateTabInState = (updatedTab: Tab) => {
     setTabsByWindow(prev => {
       const newTabsByWindow = { ...prev };
       Object.keys(newTabsByWindow).forEach(windowId => {
@@ -60,7 +61,7 @@ export function useTabs() {
     );
   };
 
-  const getTabsInGroup = (group: chrome.tabGroups.TabGroup): TabWithScreenshot[] => {
+  const getTabsInGroup = (group: Group): TabWithScreenshot[] => {
     const windowTabs = getTabsForWindow(group.windowId);
     return windowTabs.filter(tab => 
       tab.groupId === group.id && tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE

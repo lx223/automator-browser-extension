@@ -1,3 +1,4 @@
+import type { Tab, Group } from '../types/browser';
 import React, { useState, useEffect } from 'react'
 import WorkspaceManager from '../components/WorkspaceManager'
 import TabTile from '../components/TabTile'
@@ -34,7 +35,7 @@ const App: React.FC = () => {
     handleDrop
   } = useDragDrop();
 
-  const [tabGroups, setTabGroups] = useState<chrome.tabGroups.TabGroup[]>([])
+  const [tabGroups, setTabGroups] = useState<Group[]>([])
   const [showWorkspaceManager, setShowWorkspaceManager] = useState(false)
 
   useEffect(() => {
@@ -117,7 +118,7 @@ const App: React.FC = () => {
     }
   }
 
-  const handleTabClick = (tab: chrome.tabs.Tab) => {
+  const handleTabClick = (tab: Tab) => {
     if (tab.id) {
       chrome.tabs.update(tab.id, { active: true })
       chrome.windows.update(tab.windowId!, { focused: true })
@@ -141,7 +142,7 @@ const App: React.FC = () => {
     })
     
     if (targetTab) {
-      const currentPinned = (targetTab as chrome.tabs.Tab).pinned || false
+      const currentPinned = (targetTab as Tab).pinned || false
       const newPinnedState = !currentPinned
       chrome.runtime.sendMessage({ 
         type: MESSAGE_TYPES.PIN_TAB, 

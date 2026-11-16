@@ -1,3 +1,4 @@
+import type { Tab } from '../types/browser';
 import { BRAND_COLORS, DEFAULT_COLORS } from '../constants/brandColors';
 import { getDomainFromUrl } from './urlUtils';
 
@@ -5,7 +6,7 @@ export function getColorsForDomain(domain: string): {primary: string, secondary:
   return BRAND_COLORS[domain] || DEFAULT_COLORS;
 }
 
-export function createEnhancedPlaceholderScreenshot(tab: chrome.tabs.Tab): {success: boolean, dataUrl: string} {
+export function createEnhancedPlaceholderScreenshot(tab: Tab): {success: boolean, dataUrl: string} {
   const domain = getDomainFromUrl(tab.url || '');
   const title = (tab.title || 'Untitled').substring(0, 25);
   const colors = getColorsForDomain(domain);

@@ -1,5 +1,5 @@
 import { Workspace, WorkspaceState } from '../types/workspace';
-import { getAllWindows, createWindow, removeWindow, createTab } from '../utils/chromeUtils';
+import { getAllWindows, createWindow, removeWindow, createTab, getWindow } from '../utils/chromeUtils';
 
 export class WorkspaceService {
   async getWorkspaceState(): Promise<WorkspaceState> {
@@ -62,7 +62,7 @@ export class WorkspaceService {
       // Create new clean workspace with just extension tab
       const extensionUrl = chrome.runtime.getURL('tabs/index.html');
       const extensionTab = await createTab({ url: extensionUrl });
-      const extensionWindow = await chrome.windows.get(extensionTab.windowId!);
+      const extensionWindow = await getWindow(extensionTab.windowId!);
       
       const newActiveWorkspace: Workspace = {
         id: `workspace_${Date.now()}`,

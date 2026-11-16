@@ -1,4 +1,5 @@
-export interface TabWithScreenshot extends chrome.tabs.Tab {
+import type { Tab } from './browser';
+export interface TabWithScreenshot extends Tab {
   screenshot?: string;
 }
 

@@ -1,7 +1,8 @@
+import type { Tab, Group } from '../types/browser';
 import { getAllTabs, getTabsForWindow, getAllTabGroups, getTabGroupsForWindow, moveTab } from '../utils/chromeUtils';
 
 export class TabService {
-  async getAllTabsWithGroups(): Promise<chrome.tabs.Tab[]> {
+  async getAllTabsWithGroups(): Promise<Tab[]> {
     try {
       return await getAllTabs();
     } catch (error) {
@@ -10,7 +11,7 @@ export class TabService {
     }
   }
 
-  async getTabsForWindowWithGroups(windowId: number): Promise<chrome.tabs.Tab[]> {
+  async getTabsForWindowWithGroups(windowId: number): Promise<Tab[]> {
     try {
       return await getTabsForWindow(windowId);
     } catch (error) {
@@ -62,7 +63,7 @@ export class TabService {
     }
   }
 
-  async getAllTabGroups(): Promise<chrome.tabGroups.TabGroup[]> {
+  async getAllTabGroups(): Promise<Group[]> {
     try {
       return await getAllTabGroups();
     } catch (error) {
@@ -71,7 +72,7 @@ export class TabService {
     }
   }
 
-  async getTabGroupsForWindow(windowId: number): Promise<chrome.tabGroups.TabGroup[]> {
+  async getTabGroupsForWindow(windowId: number): Promise<Group[]> {
     try {
       return await getTabGroupsForWindow(windowId);
     } catch (error) {

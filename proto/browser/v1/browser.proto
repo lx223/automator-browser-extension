@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package browser.v1;
+
+// Tab is a browser tab snapshot. IDs are session-scoped, signed browser IDs.
+message Tab {
+  optional int32 id = 1;
+  int32 window_id = 2;
+  int32 index = 3;
+  // Absent when unavailable; -1 means the tab is not grouped.
+  optional int32 group_id = 4;
+  optional string url = 5;
+  optional string pending_url = 6;
+  optional string title = 7;
+  optional string fav_icon_url = 8;
+  bool active = 9;
+  bool pinned = 10;
+  bool highlighted = 11;
+  bool incognito = 12;
+  optional bool audible = 13;
+  optional bool discarded = 14;
+  optional bool auto_discardable = 15;
+  // Browser status string, for example "loading" or "complete".
+  optional string status = 16;
+  optional int32 opener_tab_id = 17;
+  optional int32 width = 18;
+  optional int32 height = 19;
+  MutedInfo muted_info = 20;
+  optional string session_id = 21;
+}
+
+// MutedInfo describes why a tab's audio is muted.
+message MutedInfo {
+  bool muted = 1;
+  optional string reason = 2;
+  optional string extension_id = 3;
+}
+
+// Group is a browser tab group. Tabs reference it via group_id.
+message Group {
+  int32 id = 1;
+  int32 window_id = 2;
+  optional string title = 3;
+  // Browser color name such as "grey", "blue", or "red".
+  string color = 4;
+  bool collapsed = 5;
+}
+
+// Window is a browser window snapshot; tabs is empty when not populated.
+message Window {
+  optional int32 id = 1;
+  bool focused = 2;
+  bool incognito = 3;
+  bool always_on_top = 4;
+  optional int32 top = 5;
+  optional int32 left = 6;
+  optional int32 width = 7;
+  optional int32 height = 8;
+  // Browser window type and state strings allow new browser values.
+  optional string type = 9;
+  optional string state = 10;
+  repeated Tab tabs = 11;
+  optional string session_id = 12;
+}

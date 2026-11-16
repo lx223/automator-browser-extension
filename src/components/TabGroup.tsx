@@ -1,11 +1,12 @@
+import type { Tab, Group } from '../types/browser';
 import React from 'react';
 import { TabWithScreenshot } from '../types/tab';
 
 interface TabGroupProps {
-  group: chrome.tabGroups.TabGroup;
+  group: Group;
   groupTabs: TabWithScreenshot[];
   screenshotsLoading: Set<number>;
-  onTabClick: (tab: chrome.tabs.Tab) => void;
+  onTabClick: (tab: Tab) => void;
   onCloseTab: (tabId: number, event: React.MouseEvent) => void;
   onPinTab: (tabId: number, event: React.MouseEvent) => void;
   getFaviconUrl: (url: string) => string;

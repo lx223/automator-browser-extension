@@ -1,3 +1,5 @@
+import { tabFromChrome } from '../utils/browserModels';
+import type { Tab } from '../types/browser';
 import { ExtensionMessage } from '../types/message';
 import { MESSAGE_TYPES } from '../constants/messages';
 import { WorkspaceService } from './workspaceService';
@@ -95,14 +97,14 @@ export class MessageService {
 
   private handleGetAllTabs(sendResponse: (response: any) => void): void {
     chrome.tabs.query({}, (tabs) => {
-      const tabsByWindow: Record<number, chrome.tabs.Tab[]> = {};
+      const tabsByWindow: Record<number, Tab[]> = {};
       
       tabs.forEach(tab => {
         if (tab.windowId) {
           if (!tabsByWindow[tab.windowId]) {
             tabsByWindow[tab.windowId] = [];
           }
-          tabsByWindow[tab.windowId].push(tab);
+          tabsByWindow[tab.windowId].push(tabFromChrome(tab));
         }
       });
       

@@ -1,6 +1,7 @@
+import type { Tab } from './browser';
 export interface WorkspaceWindow {
   id: number;
-  tabs: chrome.tabs.Tab[];
+  tabs: Tab[];
   focused: boolean;
 }
 
