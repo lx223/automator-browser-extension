@@ -2,12 +2,13 @@
   "manifest_version": 3,
   "name": "OverTabbed - Tab Manager",
   "version": "0.0.1",
-  "description": "Manage tabs in a convenient, and automated way",
+  "description": "Automate tab management with custom rules",
   "permissions": [
     "tabs",
     "tabGroups",
     "windows",
-    "storage"
+    "storage",
+    "alarms"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -17,7 +18,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Open Tab Manager"
+    "default_title": "Open Tab Rules"
   },
   "icons": {
     "16": "icons/icon16.png",

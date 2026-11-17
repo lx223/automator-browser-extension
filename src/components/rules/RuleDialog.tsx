@@ -43,6 +43,7 @@ export const RuleDialog: React.FC<RuleDialogProps> = ({
   onFieldChange,
 }) => {
   const needsTimeUnit = formState.conditionType === ConditionType.TAB_AGE || formState.conditionType === ConditionType.TAB_INACTIVE_DURATION;
+  const missingGroupName = formState.actionType === ActionType.MOVE_TO_GROUP && !formState.actionGroupName.trim();
 
   return (
     <Dialog
@@ -274,7 +275,7 @@ export const RuleDialog: React.FC<RuleDialogProps> = ({
         </Button>
         <Button
           onClick={onSave}
-          disabled={!formState.ruleName.trim()}
+          disabled={!formState.ruleName.trim() || missingGroupName}
           sx={{
             backgroundColor: 'var(--accent-primary)',
             color: 'white',
