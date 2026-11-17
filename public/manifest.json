@@ -7,7 +7,8 @@
     "tabs",
     "tabGroups",
     "windows",
-    "storage"
+    "storage",
+    "alarms"
   ],
   "host_permissions": [
     "<all_urls>"

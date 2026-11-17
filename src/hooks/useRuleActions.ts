@@ -1,20 +1,16 @@
 import { useCallback } from 'react';
 import type { Rule } from '@/utils/rule';
+import * as ruleStorage from '@/services/ruleStorage';
+import type { RuleInput } from '@/services/ruleStorage';
 
 export function useRuleActions() {
-  const createRule = useCallback(async (_rule: Omit<Rule, 'id' | 'createdAt' | 'updatedAt'>) => {
-    return {} as Rule;
-  }, []);
+  const createRule = useCallback((rule: RuleInput) => ruleStorage.addRule(rule), []);
 
-  const updateRule = useCallback(async (_id: string, _updates: Partial<Rule>) => {
-    return {} as Rule;
-  }, []);
+  const updateRule = useCallback((id: string, updates: Partial<Rule>) => ruleStorage.updateRule(id, updates), []);
 
-  const deleteRule = useCallback(async (_id: string) => {
-  }, []);
+  const deleteRule = useCallback((id: string) => ruleStorage.deleteRule(id), []);
 
-  const toggleRule = useCallback(async (_id: string) => {
-  }, []);
+  const toggleRule = useCallback((id: string) => ruleStorage.toggleRule(id), []);
 
   return {
     createRule,

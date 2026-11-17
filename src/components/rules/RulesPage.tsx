@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Box, Typography, Button, Tooltip } from '@mui/material';
+import { Box, Typography, Button, Tooltip, Snackbar } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useRules } from '@/hooks/useRules';
@@ -8,6 +8,8 @@ import { RuleCard } from './RuleCard';
 import { RuleDialog } from './RuleDialog';
 import { useRuleForm } from './useRuleForm';
 import { ConfirmDialog } from '@/components/common';
+import { RUN_RULES_MESSAGE } from '@/engine/runner';
+import type { RuleRunResult } from '@/engine/runner';
 import {
   createRule,
   createSubject,
@@ -28,6 +30,7 @@ export const RulesPage: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [ruleToDelete, setRuleToDelete] = useState<string | null>(null);
+  const [runMessage, setRunMessage] = useState<string | null>(null);
 
   const {
     formState,
@@ -125,9 +128,17 @@ export const RulesPage: React.FC = () => {
 
   const handleRunRules = useCallback(async () => {
     try {
-      await chrome.runtime.sendMessage({ type: 'RUN_RULES_MANUALLY' });
+      const response: { ok: boolean; results?: RuleRunResult[] } | undefined = await chrome.runtime.sendMessage({
+        type: RUN_RULES_MESSAGE,
+      });
+      if (!response?.ok) {
+        setRunMessage('Rules could not be run');
+        return;
+      }
+      const affected = (response.results ?? []).reduce((total, result) => total + result.affected, 0);
+      setRunMessage(affected === 0 ? 'Rules ran: no tabs changed' : `Rules ran: ${affected} tab${affected === 1 ? '' : 's'} changed`);
     } catch {
-      console.error('Rules engine not available');
+      setRunMessage('Rules could not be run');
     }
   }, []);
 
@@ -261,6 +272,14 @@ export const RulesPage: React.FC = () => {
         confirmColor="error"
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteConfirmOpen(false)}
+      />
+
+      <Snackbar
+        open={runMessage !== null}
+        autoHideDuration={4000}
+        onClose={() => setRunMessage(null)}
+        message={runMessage}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       />
     </Box>
   );
