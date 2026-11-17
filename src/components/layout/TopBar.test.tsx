@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TopBar } from './TopBar';
-import type { TabType } from '@/App';
 
 const mockSetMode = vi.fn();
 let mockMode = 'auto';
@@ -15,15 +14,8 @@ vi.mock('@/theme/ThemeContext', () => ({
     }),
 }));
 
-function renderTopBar(props: Partial<{ activeTab: TabType; onTabChange: (tab: TabType) => void }> = {}) {
-    const defaultProps = {
-        activeTab: 'workspace' as TabType,
-        onTabChange: vi.fn(),
-    };
-    return {
-        ...render(<TopBar {...defaultProps} {...props} />),
-        onTabChange: props.onTabChange ?? defaultProps.onTabChange,
-    };
+function renderTopBar() {
+    return render(<TopBar />);
 }
 
 describe('TopBar', () => {
@@ -38,10 +30,9 @@ describe('TopBar', () => {
             expect(screen.getByText('Overtabbed')).toBeInTheDocument();
         });
 
-        it('renders both navigation tabs', () => {
+        it('does not render page navigation tabs', () => {
             renderTopBar();
-            expect(screen.getByRole('tab', { name: /workspace/i })).toBeInTheDocument();
-            expect(screen.getByRole('tab', { name: /rules/i })).toBeInTheDocument();
+            expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
         });
 
         it('renders all theme mode toggle buttons', () => {
@@ -49,38 +40,6 @@ describe('TopBar', () => {
             expect(screen.getByRole('button', { name: /light mode/i })).toBeInTheDocument();
             expect(screen.getByRole('button', { name: /auto mode/i })).toBeInTheDocument();
             expect(screen.getByRole('button', { name: /dark mode/i })).toBeInTheDocument();
-        });
-
-        it('shows workspace tab as selected when activeTab is workspace', () => {
-            renderTopBar({ activeTab: 'workspace' });
-            const workspaceTab = screen.getByRole('tab', { name: /workspace/i });
-            expect(workspaceTab).toHaveAttribute('aria-selected', 'true');
-        });
-
-        it('shows rules tab as selected when activeTab is rules', () => {
-            renderTopBar({ activeTab: 'rules' });
-            const rulesTab = screen.getByRole('tab', { name: /rules/i });
-            expect(rulesTab).toHaveAttribute('aria-selected', 'true');
-        });
-    });
-
-    describe('tab navigation', () => {
-        it('calls onTabChange with "rules" when Rules tab is clicked', async () => {
-            const user = userEvent.setup();
-            const { onTabChange } = renderTopBar({ activeTab: 'workspace' });
-
-            await user.click(screen.getByRole('tab', { name: /rules/i }));
-
-            expect(onTabChange).toHaveBeenCalledWith('rules');
-        });
-
-        it('calls onTabChange with "workspace" when Workspace tab is clicked', async () => {
-            const user = userEvent.setup();
-            const { onTabChange } = renderTopBar({ activeTab: 'rules' });
-
-            await user.click(screen.getByRole('tab', { name: /workspace/i }));
-
-            expect(onTabChange).toHaveBeenCalledWith('workspace');
         });
     });
 
@@ -117,11 +76,6 @@ describe('TopBar', () => {
     });
 
     describe('accessibility', () => {
-        it('has proper tablist role for navigation tabs', () => {
-            renderTopBar();
-            expect(screen.getByRole('tablist')).toBeInTheDocument();
-        });
-
         it('has proper group role for theme toggle buttons', () => {
             renderTopBar();
             const toggleGroup = screen.getByRole('group');
